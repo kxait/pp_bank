@@ -1,13 +1,12 @@
 #ifndef PP_BANK_ACCOUNTWITHBALANCE_H
 #define PP_BANK_ACCOUNTWITHBALANCE_H
 
+#include "AccountList.h"
 
-#include "Account.h"
-
-class AccountWithBalance : public Account {
+class AccountWithBalance : public AccountList::Account {
     double balance{};
 public:
-    AccountWithBalance(Account under, double balance);
+    AccountWithBalance(AccountList::Account under, double balance);
     double Balance() const;
 };
 

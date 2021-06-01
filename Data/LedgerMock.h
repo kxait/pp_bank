@@ -1,17 +1,15 @@
 #ifndef PP_BANK_LEDGERMOCK_H
 #define PP_BANK_LEDGERMOCK_H
 
-
 #include <vector>
-#include "../Transaction.h"
 #include "../DALC/LedgerDALC.h"
 
 class LedgerMock : public LedgerDALC {
-    static std::vector<Transaction> data;
+    static std::vector<Ledger::Transaction> data;
 public:
-    std::vector<Transaction> getTransactions() override;
+    std::vector<Ledger::Transaction> getTransactions() override;
     Ledger* getLedger() override;
-    bool saveTransactions(std::vector<Transaction> transactions) override;
+    bool saveTransactions(std::vector<Ledger::Transaction> transactions) override;
 };
 
 

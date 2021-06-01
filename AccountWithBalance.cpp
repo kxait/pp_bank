@@ -1,7 +1,7 @@
 #include "AccountWithBalance.h"
 
-AccountWithBalance::AccountWithBalance(Account under, double balance)
-    : Account(under.Id(), under.Name(), under.Pesel()),
+AccountWithBalance::AccountWithBalance(AccountList::Account under, double balance)
+    : AccountList::Account(under.Id(), under.Name(), under.Pesel()),
     balance(balance) {
 
 }

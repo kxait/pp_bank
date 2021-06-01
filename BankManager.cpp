@@ -12,12 +12,12 @@ BankManager::BankManager(LedgerDALC* ledgDalc, AccountDALC* accDalc)
     transFac = TransactionFactory(ledger);
 }
 
-Account* BankManager::createAccount(std::string holderName, std::string holderPesel) {
+AccountList::Account* BankManager::createAccount(std::string holderName, std::string holderPesel) {
     return modifyAccount(accList->getNextAccountId(), std::move(holderName), std::move(holderPesel));
 }
 
-Account* BankManager::modifyAccount(long id, std::string holderName, std::string holderPesel) {
-    auto acc = new Account(id, std::move(holderName), std::move(holderPesel));
+AccountList::Account* BankManager::modifyAccount(long id, std::string holderName, std::string holderPesel) {
+    auto acc = new AccountList::Account(id, std::move(holderName), std::move(holderPesel));
     accList->addOrModifyAccount(*acc);
     return acc;
 }
@@ -38,7 +38,7 @@ void BankManager::deleteAccountWithTransfer(long id, long destId) {
 }
 
 // rzuci wyjatek jesli transakcja jest niepoprawna
-Transaction BankManager::createTransaction(long sourceId, long destId, double amount) {
+Ledger::Transaction BankManager::createTransaction(long sourceId, long destId, double amount) {
     if(accList->accountExists(sourceId) && accList->accountExists(destId) && amount != 0) {
         auto trans = transFac.createTransaction(sourceId, destId, amount);
         return trans;
@@ -49,10 +49,10 @@ Transaction BankManager::createTransaction(long sourceId, long destId, double am
 void BankManager::saveData() {
     throwIfLedgerInvalid();
 
-    auto a = const_cast<std::vector<Transaction>*>(ledger->getTransactions());
+    auto a = const_cast<std::vector<Ledger::Transaction>*>(ledger->getTransactions());
     ledgDalc->saveTransactions(*a);
 
-    auto b = const_cast<std::vector<Account>*>(accList->getAccounts());
+    auto b = const_cast<std::vector<AccountList::Account>*>(accList->getAccounts());
     accDalc->saveAccounts(*b);
 }
 
@@ -78,7 +78,7 @@ double BankManager::accountBalance(long id) {
     return ledger->getBalance(id);
 }
 
-Account *BankManager::getAccount(long id) {
+AccountList::Account *BankManager::getAccount(long id) {
     return accList->getAccount(id);
 }
 

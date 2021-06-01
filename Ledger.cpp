@@ -1,13 +1,13 @@
 #include "Ledger.h"
 
 // nowe id aby nie bylo kolizji
-bool Ledger::addTransaction(Transaction t) {
-    Transaction newT(getNextTransactionId(), t.SourceId(), t.DestId(), t.Amount());
+bool Ledger::addTransaction(Ledger::Transaction t) {
+    Ledger::Transaction newT(getNextTransactionId(), t.SourceId(), t.DestId(), t.Amount());
     ledger.push_back(newT);
     return false;
 }
 
-Transaction* Ledger::getTransaction(long id) {
+Ledger::Transaction* Ledger::getTransaction(long id) {
     long index = getTransactionId(id);
     if(index == -1) {
         return nullptr;
@@ -50,18 +50,15 @@ bool Ledger::isLedgerValid() {
     return true;
 }
 
-Ledger::Ledger(const Ledger& other) {
+Ledger::Ledger(const Ledger& other)
+    : ledger() {
     for(auto i : other.ledger) {
-        addTransaction(Transaction(i.Id(), i.SourceId(), i.DestId(), i.Amount()));
+        addTransaction(Ledger::Transaction(i.Id(), i.SourceId(), i.DestId(), i.Amount()));
     }
 }
 
 long Ledger::transQty() {
     return ledger.size();
-}
-
-Ledger::Ledger() {
-
 }
 
 std::map<long, double> Ledger::getBalanceSheet() {
@@ -82,6 +79,33 @@ std::map<long, double> Ledger::getBalanceSheet() {
     return balanceSheet;
 }
 
-const std::vector<Transaction> *Ledger::getTransactions() {
-    return new std::vector<Transaction>{ledger};
+const std::vector<Ledger::Transaction> *Ledger::getTransactions() {
+    return new std::vector<Ledger::Transaction>{ledger};
 }
+
+Ledger::Ledger() {
+
+}
+
+Ledger::Transaction::Transaction(long id, long sourceId, long destinationId, double amount) :
+        id(id),
+        sourceId(sourceId),
+        destinationId(destinationId),
+        amount(amount) { }
+
+long Ledger::Transaction::Id() const {
+    return id;
+}
+
+long Ledger::Transaction::SourceId() const {
+    return sourceId;
+}
+
+long Ledger::Transaction::DestId() const {
+    return destinationId;
+}
+
+double Ledger::Transaction::Amount() const {
+    return amount;
+}
+

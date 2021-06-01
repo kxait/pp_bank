@@ -58,3 +58,22 @@ bool AccountList::accountExists(long id) {
 const std::vector<Account> *AccountList::getAccounts() {
     return const_cast<const std::vector<Account>*>(&list);
 }
+
+AccountList::Account::Account(long id, std::string holderName, std::string holderPesel)
+    : id(id),
+    holderName(std::move(holderName)),
+    holderPesel(std::move(holderPesel)) {
+
+}
+
+long AccountList::Account::Id() {
+    return id;
+}
+
+std::string AccountList::Account::Name() {
+    return holderName;
+}
+
+std::string AccountList::Account::Pesel() {
+    return holderPesel;
+}

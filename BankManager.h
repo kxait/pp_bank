@@ -1,7 +1,3 @@
-//
-// Created by Tomek Osika on 25/05/2021.
-//
-
 #ifndef PP_BANK_BANKMANAGER_H
 #define PP_BANK_BANKMANAGER_H
 
@@ -22,16 +18,16 @@ class BankManager {
     void throwIfLedgerInvalid();
 public:
     BankManager(LedgerDALC* ledgDalc, AccountDALC* accDalc);
-    Account* createAccount(std::string holderName, std::string holderPesel);
-    Account* modifyAccount(long id, std::string holderName, std::string holderPesel);
+    AccountList::Account* createAccount(std::string holderName, std::string holderPesel);
+    AccountList::Account* modifyAccount(long id, std::string holderName, std::string holderPesel);
     void deleteAccountWithPayout(long id);
     void deleteAccountWithTransfer(long id, long destId);
-    Transaction createTransaction(long sourceId, long destId, double amount);
+    Ledger::Transaction createTransaction(long sourceId, long destId, double amount);
     void saveData();
     void readData();
     std::vector<AccountWithBalance> getAccountList();
     double accountBalance(long id);
-    Account* getAccount(long id);
+    AccountList::Account* getAccount(long id);
 };
 
 
