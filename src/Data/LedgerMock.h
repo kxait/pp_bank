@@ -10,6 +10,7 @@ public:
     std::vector<Ledger::Transaction> getTransactions() override;
     Ledger* getLedger() override;
     bool saveTransactions(std::vector<Ledger::Transaction> transactions) override;
+    std::string getLocation() override;
 };
 
 

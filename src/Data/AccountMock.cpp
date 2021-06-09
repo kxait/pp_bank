@@ -24,3 +24,7 @@ AccountList* AccountMock::getAccountList() {
     }
     return list;
 }
+
+std::string AccountMock::getLocation() {
+    return "mock";
+}

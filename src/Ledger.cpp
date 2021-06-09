@@ -51,10 +51,7 @@ bool Ledger::isLedgerValid() {
 }
 
 Ledger::Ledger(const Ledger& other)
-    : ledger() {
-    for(auto i : other.ledger) {
-        addTransaction(Ledger::Transaction(i.Id(), i.SourceId(), i.DestId(), i.Amount()));
-    }
+    : ledger(other.ledger) {
 }
 
 long Ledger::transQty() {

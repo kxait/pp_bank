@@ -10,6 +10,7 @@ public:
     std::vector<Account> getAccounts() override;
     AccountList* getAccountList() override;
     bool saveAccounts(std::vector<Account>) override;
+    std::string getLocation() override;
 };
 
 

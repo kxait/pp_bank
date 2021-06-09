@@ -9,6 +9,7 @@ public:
     virtual std::vector<Ledger::Transaction> getTransactions() = 0;
     virtual Ledger* getLedger() = 0;
     virtual bool saveTransactions(std::vector<Ledger::Transaction> transactions) = 0;
+    virtual std::string getLocation() = 0;
 };
 
 

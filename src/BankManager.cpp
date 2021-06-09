@@ -43,7 +43,7 @@ Ledger::Transaction BankManager::createTransaction(long sourceId, long destId, d
         auto trans = transFac.createTransaction(sourceId, destId, amount);
         return trans;
     }
-    throw std::runtime_error("couldn't create transaction with bad data");
+    throw std::runtime_error("nie udalo sie stworzyc transakcji z zlymi danymi");
 }
 
 void BankManager::saveData() {
@@ -57,21 +57,37 @@ void BankManager::saveData() {
 }
 
 void BankManager::readData() {
-    auto newLedger = ledgDalc->getLedger();
+    AccountList* newAccountList;
+    try {
+        newAccountList = accDalc->getAccountList();
+    }catch(const std::exception& e) {
+        throw std::runtime_error("nie udalo sie przeczytac listy kont");
+    }
+
+    auto oldAccountList = accList;
+    accList = newAccountList;
+
+    Ledger* newLedger;
+    try {
+        newLedger = ledgDalc->getLedger();
+    }catch(const std::exception& e) {
+        accList = oldAccountList;
+        throw std::runtime_error("nie udalo sie przeczytac listy transakcji");
+    }
     if(!newLedger->isLedgerValid()) {
-        throw std::runtime_error("new ledger was invalid");
+        accList = oldAccountList;
+        throw std::runtime_error("nowa lista transakcji byla niepoprawna");
     }
 
     if(ledger != nullptr) {
         delete ledger;
     }
     ledger = newLedger;
+    transFac = TransactionFactory(ledger);
 
-    if(accList != nullptr) {
-        delete accList;
+    if(oldAccountList != nullptr) {
+        delete oldAccountList;
     }
-
-    accList = accDalc->getAccountList();
 }
 
 double BankManager::accountBalance(long id) {
@@ -95,6 +111,19 @@ std::vector<AccountWithBalance> BankManager::getAccountList() {
 
 void BankManager::throwIfLedgerInvalid() {
     if(!ledger->isLedgerValid()) {
-        throw std::runtime_error("ledger was invalid during check");
+        throw std::runtime_error("lista transakcji byla niepoprawna podczas sprawdzenia");
     }
+}
+
+std::vector<Transaction> BankManager::getTransactions() {
+    auto transactions = *ledger->getTransactions();
+    return transactions;
+}
+
+std::string BankManager::getAccountsDbLocation() {
+    return accDalc->getLocation();
+}
+
+std::string BankManager::getLedgerDbLocation() {
+    return ledgDalc->getLocation();
 }

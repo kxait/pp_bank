@@ -13,7 +13,7 @@ std::vector<Ledger::Transaction> LedgerMock::getTransactions() {
 }
 
 bool LedgerMock::saveTransactions(std::vector<Ledger::Transaction> transactions) {
-    data = std::vector<Ledger::Transaction>(transactions);
+    data = transactions;
     return true;
 }
 
@@ -23,4 +23,8 @@ Ledger *LedgerMock::getLedger() {
         list->addTransaction(i);
     }
     return list;
+}
+
+std::string LedgerMock::getLocation() {
+    return "mock";
 }

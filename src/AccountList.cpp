@@ -9,7 +9,7 @@ bool AccountList::addOrModifyAccount(Account t) {
 
     auto id = getAccountVectorIndex(t.Id());
     list[id] = t;
-    return false;
+    return true;
 }
 
 long AccountList::getAccountVectorIndex(long id) {
