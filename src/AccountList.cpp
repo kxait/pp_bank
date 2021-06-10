@@ -35,7 +35,9 @@ bool AccountList::deleteAccount(long id) {
         return false;
     }
     auto elem = getAccountVectorIndex(id);
-    list.erase(list.begin() + elem);
+    auto acc = list[elem];
+    //list.erase(list.begin() + elem);
+    list[elem] = Account(acc.Id(), acc.Name(), acc.Pesel(), true);
     return true;
 }
 
@@ -59,10 +61,11 @@ const std::vector<Account> *AccountList::getAccounts() {
     return const_cast<const std::vector<Account>*>(&list);
 }
 
-AccountList::Account::Account(long id, std::string holderName, std::string holderPesel)
+AccountList::Account::Account(long id, std::string holderName, std::string holderPesel, bool deleted)
     : id(id),
     holderName(std::move(holderName)),
-    holderPesel(std::move(holderPesel)) {
+    holderPesel(std::move(holderPesel)),
+    deleted(deleted) {
 
 }
 
@@ -76,4 +79,8 @@ std::string AccountList::Account::Name() {
 
 std::string AccountList::Account::Pesel() {
     return holderPesel;
+}
+
+bool AccountList::Account::Deleted() {
+    return deleted;
 }
