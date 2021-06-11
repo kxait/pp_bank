@@ -9,6 +9,8 @@
 #include "../Components/SingleValueDialog.h"
 #include "../Components/EditAccountDialog.h"
 
+#include<cstring>
+
 AccountDisplayScene::AccountDisplayScene(SceneComposer* comp, BankManager * mgr)
     : Scene(comp),
     man(mgr){
