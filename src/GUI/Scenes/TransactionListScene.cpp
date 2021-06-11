@@ -6,6 +6,8 @@
 #include "../Lib/ScreenProps.h"
 #include "../../Log/UserLogger.h"
 
+#include<cstring>
+
 TransactionListScene::TransactionListScene(SceneComposer * comp, BankManager * mgr)
     : Scene(comp),
     man(mgr) {
