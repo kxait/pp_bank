@@ -12,12 +12,12 @@ BankManager::BankManager(LedgerDALC* ledgDalc, AccountDALC* accDalc)
     transFac = TransactionFactory(ledger);
 }
 
-AccountList::Account* BankManager::createAccount(std::string holderName, std::string holderPesel) {
-    return modifyAccount(accList->getNextAccountId(), std::move(holderName), std::move(holderPesel));
+AccountList::Account* BankManager::createAccount(std::string holderName, std::string holderPesel, bool deleted) {
+    return modifyAccount(accList->getNextAccountId(), std::move(holderName), std::move(holderPesel), deleted);
 }
 
-AccountList::Account* BankManager::modifyAccount(long id, std::string holderName, std::string holderPesel) {
-    auto acc = new AccountList::Account(id, std::move(holderName), std::move(holderPesel));
+AccountList::Account* BankManager::modifyAccount(long id, std::string holderName, std::string holderPesel, bool deleted) {
+    auto acc = new AccountList::Account(id, std::move(holderName), std::move(holderPesel), deleted);
     accList->addOrModifyAccount(*acc);
     return acc;
 }
@@ -33,13 +33,25 @@ void BankManager::deleteAccountWithTransfer(long id, long destId) {
         throw std::out_of_range("account doesnt exist");
     }
 
-    transFac.createTransaction(acc->Id(), destId, ledger->getBalance(id));
+    if(transAcc != 0) {
+        createTransaction(acc->Id(), destId, ledger->getBalance(id));
+    }
     accList->deleteAccount(id);
 }
 
 // rzuci wyjatek jesli transakcja jest niepoprawna
 Ledger::Transaction BankManager::createTransaction(long sourceId, long destId, double amount) {
-    if(accList->accountExists(sourceId) && accList->accountExists(destId) && amount != 0) {
+    auto accountsExist =
+        accList->accountExists(sourceId)
+        && accList->accountExists(destId);
+    auto sourceAccDeletedOrDestAccDeleted = accountsExist &&
+        (accList->getAccount(sourceId)->Deleted()
+        || accList->getAccount(destId)->Deleted());
+    if(accList->accountExists(sourceId)
+        && accList->accountExists(destId)
+        && amount != 0
+        && !sourceAccDeletedOrDestAccDeleted
+        && accountsExist) {
         auto trans = transFac.createTransaction(sourceId, destId, amount);
         return trans;
     }
@@ -102,6 +114,20 @@ std::vector<AccountWithBalance> BankManager::getAccountList() {
     auto accs = accList->getAccounts();
     std::vector<AccountWithBalance> accsBalances{};
     for(auto acc : *accs) {
+        auto bal = ledger->getBalance(acc.Id());
+        AccountWithBalance a(acc, bal);
+        accsBalances.push_back(a);
+    }
+    return accsBalances;
+}
+
+std::vector<AccountWithBalance> BankManager::getAccountListSkipDeleted() {
+    auto accs = accList->getAccounts();
+    std::vector<AccountWithBalance> accsBalances{};
+    for(auto acc : *accs) {
+        if(acc.Deleted()) {
+            continue;
+        }
         auto bal = ledger->getBalance(acc.Id());
         AccountWithBalance a(acc, bal);
         accsBalances.push_back(a);

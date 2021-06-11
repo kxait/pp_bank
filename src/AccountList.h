@@ -11,11 +11,13 @@ public:
         long id;
         std::string holderName;
         std::string holderPesel;
+        bool deleted;
     public:
-        Account(long id, std::string holderName, std::string holderPesel);
+        Account(long id, std::string holderName, std::string holderPesel, bool deleted);
         long Id();
         std::string Name();
         std::string Pesel();
+        bool Deleted();
     };
 
     bool addOrModifyAccount(Account t);
