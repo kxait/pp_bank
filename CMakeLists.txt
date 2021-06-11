@@ -1,0 +1,13 @@
+cmake_minimum_required(VERSION 3.17)
+
+project(pp_bank)
+set(CMAKE_CXX_STANDARD 14)
+set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -Wall -Werror -lpdcurses -g")
+
+find_package(Curses REQUIRED)
+include_directories(${CPPFLAGS})
+
+add_executable(pp_bank src/DALC/LedgerDALC.cpp src/DALC/LedgerDALC.h src/Ledger.cpp src/Ledger.h src/AccountList.cpp src/AccountList.h src/TransactionFactory.cpp src/TransactionFactory.h src/BankManager.cpp src/BankManager.h src/DALC/AccountDALC.cpp src/DALC/AccountDALC.h src/Data/AccountMock.cpp src/Data/AccountMock.h src/Data/LedgerMock.cpp src/Data/LedgerMock.h src/AccountWithBalance.cpp src/AccountWithBalance.h src/Data/CsvReaderWriter.cpp src/Data/CsvReaderWriter.h src/Data/AccountCsv.cpp src/Data/AccountCsv.h src/Data/LedgerCsv.cpp src/Data/LedgerCsv.h main.cpp src/BankManagerLogger.cpp src/BankManagerLogger.h src/Log/Logger.cpp src/Log/Logger.h src/Log/ConsoleLogger.cpp src/Log/ConsoleLogger.h src/Log/FileLogger.cpp src/Log/FileLogger.h src/Log/UserLogger.cpp src/Log/UserLogger.h src/GUI/BankManagerGui.cpp src/GUI/BankManagerGui.h src/GUI/Lib/ScreenProps.cpp src/GUI/Lib/ScreenProps.h src/GUI/Lib/Component.cpp src/GUI/Lib/Component.h src/GUI/Components/PagedList.cpp src/GUI/Components/PagedList.h src/GUI/Components/Popup.cpp src/GUI/Components/Popup.h src/GUI/Components/MenuHorizontal.cpp src/GUI/Components/MenuHorizontal.h src/GUI/Lib/Scene.cpp src/GUI/Lib/Scene.h src/GUI/Lib/EventObserver.cpp src/GUI/Lib/EventObserver.h src/GUI/Lib/SceneComposer.cpp src/GUI/Lib/SceneComposer.h src/GUI/Components/BankAccountDisplay.cpp src/GUI/Components/BankAccountDisplay.h src/GUI/Scenes/AccountDisplayScene.cpp src/GUI/Scenes/AccountDisplayScene.h src/GUI/Components/PopupVertical.cpp src/GUI/Components/PopupVertical.h src/GUI/Scenes/TransactionListScene.cpp src/GUI/Scenes/TransactionListScene.h src/GUI/Components/NewTransactionDialog.cpp src/GUI/Components/NewTransactionDialog.h src/GUI/Components/InputField.cpp src/GUI/Components/InputField.h src/GUI/Scenes/SceneMenuScene.cpp src/GUI/Scenes/SceneMenuScene.h src/GUI/Scenes/StartScene.cpp src/GUI/Scenes/StartScene.h src/Config.cpp src/Config.h src/DALC/ConfigDALC.cpp src/DALC/ConfigDALC.h src/Data/ConfigMock.cpp src/Data/ConfigMock.h src/Data/ConfigCsv.cpp src/Data/ConfigCsv.h src/BankConfig.cpp src/BankConfig.h src/GUI/Components/SingleValueDialog.cpp src/GUI/Components/SingleValueDialog.h src/GUI/Components/EditAccountDialog.cpp src/GUI/Components/EditAccountDialog.h)
+
+
+target_link_libraries(pp_bank ${CURSES_LIBRARIES})
