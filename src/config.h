@@ -4,12 +4,12 @@
 #include<string>
 #include<map>
 
-class Config {
-    std::map<std::string, std::string> config;
+class config {
+    std::map<std::string, std::string> m_config;
 public:
-    Config(std::map<std::string, std::string>);
-    bool exists(std::string);
-    std::string get(std::string);
+    explicit config(std::map<std::string, std::string>);
+    bool exists(const std::string&);
+    std::string get(const std::string&);
 };
 
 

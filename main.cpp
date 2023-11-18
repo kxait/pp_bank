@@ -1,51 +1,51 @@
 #include <iostream>
 #include "src\bank_manager_logger.h"
-#include "src\Data\account_mock.h"
-#include "src\Data\ledger_mock.h"
-#include "src\Log\file_logger.h"
-#include "src\Log\console_logger.h"
-#include "src\Log\user_logger.h"
-#include "src\GUI\bank_manager_gui.h"
-#include "src\DALC\config_dalc.h"
-#include "src\Data\config_mock.h"
-#include "src\Data\config_csv.h"
-#include "src\Data\ledger_csv.h"
-#include "src\Data\account_csv.h"
+#include "src\data\account_mock.h"
+#include "src\data\ledger_mock.h"
+#include "src\log\file_logger.h"
+#include "src\log\console_logger.h"
+#include "src\log\user_logger.h"
+#include "src\gui\bank_manager_gui.h"
+#include "src\dalc\config_dalc.h"
+#include "src\data\config_mock.h"
+#include "src\data\config_csv.h"
+#include "src\data\ledger_csv.h"
+#include "src\data\account_csv.h"
 #include "src\bank_config.h"
 
 int main() {
-    auto conf = dynamic_cast<ConfigDALC*>(new ConfigCsv("config.csv"));
+    auto conf = dynamic_cast<config_dalc*>(new config_csv("config.csv"));
 
-    BankConfig* bc;
+    bank_config* bc;
 
     try {
-        bc = new BankConfig(conf);
+        bc = new bank_config(conf);
     }catch(const std::exception& e) {
         std::cout << "nie udalo sie otworzyc pliku konfiguracyjnego. upewnij sie ze w folderze z plikiem wykonywalnym znajduje sie plik konfiguracyjny config.csv. plik konfiguracyjny jest plikiem csv rozdzielanym znakiem ';'" << std::endl;
         std::cout << "dodatkowe informacje: " << e.what() << std::endl;
         exit(-1);
     }
 
-    auto ledgDbLoc = bc->LedgerDbLocation();
-    auto accDbLoc = bc->AccountsDbLocation();
+    auto ledgDbLoc = bc->ledger_db_location();
+    auto accDbLoc = bc->accounts_db_location();
 
-    auto ledg = dynamic_cast<LedgerDALC*>(new LedgerCsv(ledgDbLoc));
-    auto acc = dynamic_cast<AccountDALC*>(new AccountCsv(accDbLoc));
+    auto ledg = dynamic_cast<ledger_dalc*>(new ledger_csv(ledgDbLoc));
+    auto acc = dynamic_cast<account_dalc*>(new account_csv(accDbLoc));
 
-    UserLogger l{};
+    user_logger l{};
 
-    FileLogger fl{"log.txt"};
-    ConsoleLogger cl;
+    file_logger fl{"log.txt"};
+    console_logger cl;
 
-    l.registerLogger(dynamic_cast<Logger*>(&fl));
+    l.register_logger(dynamic_cast<logger*>(&fl));
     //l.registerLogger(dynamic_cast<Logger*>(&cl));
 
-    auto manager = new BankManagerLogger(ledg, acc, &l);
+    auto manager = new bank_manager_logger(ledg, acc, &l);
 
-    manager->saveData();
+    manager->save_data();
 
-    BankManagerGui a{dynamic_cast<BankManager*>(manager)};
-    a.MakeMenu();
+    bank_manager_gui a{dynamic_cast<bank_manager*>(manager)};
+    a.make_menu();
 
     return 0;
 }

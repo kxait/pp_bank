@@ -1,46 +1,46 @@
 #include "ledger.h"
 
 // nowe id aby nie bylo kolizji
-bool Ledger::addTransaction(Ledger::Transaction t) {
-    Ledger::Transaction newT(getNextTransactionId(), t.SourceId(), t.DestId(), t.Amount());
-    ledger.push_back(newT);
+bool ledger::add_transaction(const transaction&t) {
+    const transaction new_t(get_next_transaction_id(), t.source_id(), t.dest_id(), t.amount());
+    m_ledger.push_back(new_t);
     return false;
 }
 
-Ledger::Transaction* Ledger::getTransaction(long id) {
-    long index = getTransactionId(id);
+ledger::transaction* ledger::get_transaction(const long id) {
+    const long index = get_transaction_id(id);
     if(index == -1) {
         return nullptr;
     }
-    return &(ledger[index]);
+    return &(m_ledger[index]);
 }
 
-long Ledger::getTransactionId(long id) {
-    for(long i = 0; i < ledger.size(); i++) {
-        if(ledger[i].Id() == id) {
+long ledger::get_transaction_id(const long id) const {
+    for(long i = 0; i < m_ledger.size(); i++) {
+        if(m_ledger[i].id() == id) {
             return i;
         }
     }
     return -1;
 }
 
-double Ledger::getBalance(long accountId) {
-    auto balanceSheet = getBalanceSheet();
-    if(balanceSheet.find(accountId) == balanceSheet.end()) {
+double ledger::get_balance(const long account_id) {
+    auto balance_sheet = get_balance_sheet();
+    if(balance_sheet.find(account_id) == balance_sheet.end()) {
         return 0;
     }
-    return balanceSheet[accountId];
+    return balance_sheet[account_id];
 }
 
 // zaklada ze lista tranzakcji jest ciagla
-long Ledger::getNextTransactionId() {
-    return ledger.size();
+long ledger::get_next_transaction_id() const {
+    return m_ledger.size();
 }
 
-bool Ledger::isLedgerValid() {
-    auto balanceSheet = getBalanceSheet();
+bool ledger::is_ledger_valid() {
+    const auto balance_sheet = get_balance_sheet();
 
-    for(auto trans : balanceSheet) {
+    for(const auto trans : balance_sheet) {
         if(trans.second < 0 && trans.first != 0) { // drugi warunek - konto nie jest okienkiem
             // lista jest niepoprawna - ktos ma ujemne saldo
             return false;
@@ -50,59 +50,55 @@ bool Ledger::isLedgerValid() {
     return true;
 }
 
-Ledger::Ledger(const Ledger& other)
-    : ledger(other.ledger) {
+long ledger::trans_qty() const {
+    return m_ledger.size();
 }
 
-long Ledger::transQty() {
-    return ledger.size();
-}
+std::map<long, double> ledger::get_balance_sheet() const {
+    std::map<long, double> balance_sheet{};
 
-std::map<long, double> Ledger::getBalanceSheet() {
-    std::map<long, double> balanceSheet{};
-
-    for(auto trans : ledger) {
-        if(balanceSheet.find(trans.SourceId()) == balanceSheet.end()) {
-            balanceSheet[trans.SourceId()] = 0;
+    for(auto trans : m_ledger) {
+        if(balance_sheet.find(trans.source_id()) == balance_sheet.end()) {
+            balance_sheet[trans.source_id()] = 0;
         }
-        if(balanceSheet.find(trans.DestId()) == balanceSheet.end()) {
-            balanceSheet[trans.DestId()] = 0;
+        if(balance_sheet.find(trans.dest_id()) == balance_sheet.end()) {
+            balance_sheet[trans.dest_id()] = 0;
         }
 
-        balanceSheet[trans.SourceId()] -= trans.Amount();
-        balanceSheet[trans.DestId()] += trans.Amount();
+        balance_sheet[trans.source_id()] -= trans.amount();
+        balance_sheet[trans.dest_id()] += trans.amount();
     }
 
-    return balanceSheet;
+    return balance_sheet;
 }
 
-const std::vector<Ledger::Transaction> *Ledger::getTransactions() {
-    return new std::vector<Ledger::Transaction>{ledger};
+const std::vector<ledger::transaction> *ledger::get_transactions() const {
+    return new std::vector<transaction>{m_ledger};
 }
 
-Ledger::Ledger() {
+ledger::ledger() {
 
 }
 
-Ledger::Transaction::Transaction(long id, long sourceId, long destinationId, double amount) :
-        id(id),
-        sourceId(sourceId),
-        destinationId(destinationId),
-        amount(amount) { }
+ledger::transaction::transaction(const long id, const long source_id, const long destination_id, const double amount) :
+        m_id(id),
+        m_source_id(source_id),
+        m_destination_id(destination_id),
+        m_amount(amount) { }
 
-long Ledger::Transaction::Id() const {
-    return id;
+long ledger::transaction::id() const {
+    return m_id;
 }
 
-long Ledger::Transaction::SourceId() const {
-    return sourceId;
+long ledger::transaction::source_id() const {
+    return m_source_id;
 }
 
-long Ledger::Transaction::DestId() const {
-    return destinationId;
+long ledger::transaction::dest_id() const {
+    return m_destination_id;
 }
 
-double Ledger::Transaction::Amount() const {
-    return amount;
+double ledger::transaction::amount() const {
+    return m_amount;
 }
 

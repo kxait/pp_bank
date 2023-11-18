@@ -4,27 +4,26 @@
 #include "bank_manager.h"
 #include "account_list.h"
 #include "ledger.h"
-#include "transaction_factory.h"
-#include "DALC\account_dalc.h"
-#include "DALC\ledger_dalc.h"
+#include "dalc\account_dalc.h"
+#include "dalc\ledger_dalc.h"
 #include "account_with_balance.h"
-#include "Log\user_logger.h"
+#include "log\user_logger.h"
 
-// dodatkowo lapie wyjatki
-class BankManagerLogger : public BankManager {
-    UserLogger* logger;
+// also catches exceptions
+class bank_manager_logger : public bank_manager {
+    user_logger* m_logger;
 public:
-    BankManagerLogger(LedgerDALC* ledgDalc, AccountDALC* accDalc, UserLogger* logger);
-    AccountList::Account* createAccount(std::string holderName, std::string holderPesel, bool deleted);
-    AccountList::Account* modifyAccount(long id, std::string holderName, std::string holderPesel, bool deleted);
-    void deleteAccountWithPayout(long id);
-    void deleteAccountWithTransfer(long id, long destId);
-    Ledger::Transaction createTransaction(long sourceId, long destId, double amount);
-    void saveData();
-    void readData();
-    std::vector<AccountWithBalance> getAccountList();
-    double accountBalance(long id);
-    AccountList::Account* getAccount(long id);
+    bank_manager_logger(ledger_dalc* ledg_dalc, account_dalc* acc_dalc, user_logger* logger);
+    account_list::account* create_account(std::string holder_name, std::string holder_pesel, bool deleted) override;
+    account_list::account* modify_account(long id, std::string holder_name, std::string holder_pesel, bool deleted) override;
+    void delete_account_with_payout(long id) override;
+    void delete_account_with_transfer(long id, long dest_id) override;
+    ledger::transaction create_transaction(long source_id, long dest_id, double amount) override;
+    void save_data() override;
+    void read_data() override;
+    std::vector<account_with_balance> get_account_list() override;
+    double account_balance(long id) override;
+    account_list::account* get_account(long id) override;
 };
 
 

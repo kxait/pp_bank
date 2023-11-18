@@ -1,155 +1,152 @@
 #include "bank_manager.h"
 
-#include <utility>
-#include "DALC\ledger_dalc.h"
-#include "DALC\account_dalc.h"
+#include "dalc\ledger_dalc.h"
+#include "dalc\account_dalc.h"
 
-BankManager::BankManager(LedgerDALC* ledgDalc, AccountDALC* accDalc)
-    : transFac(nullptr),
-    ledgDalc(ledgDalc),
-    accDalc(accDalc) {
-    readData();
-    transFac = TransactionFactory(ledger);
+bank_manager::bank_manager(ledger_dalc* ledg_dalc, account_dalc* acc_dalc)
+    : m_transaction_factory(nullptr),
+    m_ledger_dalc(ledg_dalc),
+    m_account_dalc(acc_dalc) {
+    read_data();
+    m_transaction_factory = transaction_factory(m_ledger);
 }
 
-AccountList::Account* BankManager::createAccount(std::string holderName, std::string holderPesel, bool deleted) {
-    return modifyAccount(accList->getNextAccountId(), std::move(holderName), std::move(holderPesel), deleted);
+account_list::account* bank_manager::create_account(std::string holder_name, std::string holder_pesel, const bool deleted) {
+    return modify_account(m_acc_list->get_next_account_id(), std::move(holder_name), std::move(holder_pesel), deleted);
 }
 
-AccountList::Account* BankManager::modifyAccount(long id, std::string holderName, std::string holderPesel, bool deleted) {
-    auto acc = new AccountList::Account(id, std::move(holderName), std::move(holderPesel), deleted);
-    accList->addOrModifyAccount(*acc);
+account_list::account* bank_manager::modify_account(const long id, std::string holder_name, std::string holder_pesel, const bool deleted) {
+    const auto acc = new account_list::account(id, std::move(holder_name), std::move(holder_pesel), deleted);
+    m_acc_list->add_or_modify_account(*acc);
     return acc;
 }
 
-void BankManager::deleteAccountWithPayout(long id) {
-    deleteAccountWithTransfer(id, 0);
+void bank_manager::delete_account_with_payout(const long id) {
+    delete_account_with_transfer(id, 0);
 }
 
-void BankManager::deleteAccountWithTransfer(long id, long destId) {
-    auto transAcc = ledger->getBalance(id);
-    auto acc = accList->getAccount(id);
-    if(transAcc == -1 || acc == nullptr) {
+void bank_manager::delete_account_with_transfer(const long id, const long dest_id) {
+    const auto trans_acc = m_ledger->get_balance(id);
+    const auto acc = m_acc_list->get_account(id);
+    if(trans_acc == -1 || acc == nullptr) {
         throw std::out_of_range("account doesnt exist");
     }
 
-    if(transAcc != 0) {
-        createTransaction(acc->Id(), destId, ledger->getBalance(id));
+    if(trans_acc != 0) {
+        create_transaction(acc->id(), dest_id, m_ledger->get_balance(id));
     }
-    accList->deleteAccount(id);
+    m_acc_list->delete_account(id);
 }
 
 // rzuci wyjatek jesli transakcja jest niepoprawna
-Ledger::Transaction BankManager::createTransaction(long sourceId, long destId, double amount) {
-    auto accountsExist =
-        accList->accountExists(sourceId)
-        && accList->accountExists(destId);
-    auto sourceAccDeletedOrDestAccDeleted = accountsExist &&
-        (accList->getAccount(sourceId)->Deleted()
-        || accList->getAccount(destId)->Deleted());
-    if(accList->accountExists(sourceId)
-        && accList->accountExists(destId)
+ledger::transaction bank_manager::create_transaction(const long source_id, const long dest_id, const double amount) {
+    const auto accounts_exist =
+        m_acc_list->account_exists(source_id)
+        && m_acc_list->account_exists(dest_id);
+    const auto source_acc_deleted_or_dest_acc_deleted = accounts_exist &&
+                                                        (m_acc_list->get_account(source_id)->deleted()
+                                                         || m_acc_list->get_account(dest_id)->deleted());
+    if(m_acc_list->account_exists(source_id)
+        && m_acc_list->account_exists(dest_id)
         && amount != 0
-        && !sourceAccDeletedOrDestAccDeleted
-        && accountsExist) {
-        auto trans = transFac.createTransaction(sourceId, destId, amount);
+        && !source_acc_deleted_or_dest_acc_deleted
+        && accounts_exist) {
+        const auto trans = m_transaction_factory.create_transaction(source_id, dest_id, amount);
         return trans;
     }
     throw std::runtime_error("nie udalo sie stworzyc transakcji z zlymi danymi");
 }
 
-void BankManager::saveData() {
-    throwIfLedgerInvalid();
+void bank_manager::save_data() {
+    throw_if_ledger_invalid();
 
-    auto a = const_cast<std::vector<Ledger::Transaction>*>(ledger->getTransactions());
-    ledgDalc->saveTransactions(*a);
+    auto a = const_cast<std::vector<ledger::transaction>*>(m_ledger->get_transactions());
+    m_ledger_dalc->save_transactions(*a);
 
-    auto b = const_cast<std::vector<AccountList::Account>*>(accList->getAccounts());
-    accDalc->saveAccounts(*b);
+    auto b = const_cast<std::vector<account_list::account>*>(m_acc_list->get_accounts());
+    m_account_dalc->save_accounts(*b);
 }
 
-void BankManager::readData() {
-    AccountList* newAccountList;
+void bank_manager::read_data() {
+    account_list* new_account_list;
     try {
-        newAccountList = accDalc->getAccountList();
+        new_account_list = m_account_dalc->get_account_list();
     }catch(const std::exception& e) {
         throw std::runtime_error("nie udalo sie przeczytac listy kont");
     }
 
-    auto oldAccountList = accList;
-    accList = newAccountList;
+    const auto old_account_list = m_acc_list;
+    m_acc_list = new_account_list;
 
-    Ledger* newLedger;
+    ledger* new_ledger;
     try {
-        newLedger = ledgDalc->getLedger();
+        new_ledger = m_ledger_dalc->get_ledger();
     }catch(const std::exception& e) {
-        accList = oldAccountList;
+        m_acc_list = old_account_list;
         throw std::runtime_error("nie udalo sie przeczytac listy transakcji");
     }
-    if(!newLedger->isLedgerValid()) {
-        accList = oldAccountList;
+    if(!new_ledger->is_ledger_valid()) {
+        m_acc_list = old_account_list;
         throw std::runtime_error("nowa lista transakcji byla niepoprawna");
     }
 
-    if(ledger != nullptr) {
-        delete ledger;
+    if(m_ledger != nullptr) {
+        delete m_ledger;
     }
-    ledger = newLedger;
-    transFac = TransactionFactory(ledger);
+    m_ledger = new_ledger;
+    m_transaction_factory = transaction_factory(m_ledger);
 
-    if(oldAccountList != nullptr) {
-        delete oldAccountList;
+    delete old_account_list;
+}
+
+double bank_manager::account_balance(const long id) {
+    return m_ledger->get_balance(id);
+}
+
+account_list::account *bank_manager::get_account(const long id) {
+    return m_acc_list->get_account(id);
+}
+
+std::vector<account_with_balance> bank_manager::get_account_list() {
+    const auto accs = m_acc_list->get_accounts();
+    std::vector<account_with_balance> with_balances{};
+    for(const auto& acc : *accs) {
+        const auto bal = m_ledger->get_balance(acc.id());
+        account_with_balance a(acc, bal);
+        with_balances.push_back(a);
     }
+    return with_balances;
 }
 
-double BankManager::accountBalance(long id) {
-    return ledger->getBalance(id);
-}
-
-AccountList::Account *BankManager::getAccount(long id) {
-    return accList->getAccount(id);
-}
-
-std::vector<AccountWithBalance> BankManager::getAccountList() {
-    auto accs = accList->getAccounts();
-    std::vector<AccountWithBalance> accsBalances{};
+std::vector<account_with_balance> bank_manager::get_account_list_skip_deleted() const {
+    auto accs = m_acc_list->get_accounts();
+    std::vector<account_with_balance> accsBalances{};
     for(auto acc : *accs) {
-        auto bal = ledger->getBalance(acc.Id());
-        AccountWithBalance a(acc, bal);
-        accsBalances.push_back(a);
-    }
-    return accsBalances;
-}
-
-std::vector<AccountWithBalance> BankManager::getAccountListSkipDeleted() {
-    auto accs = accList->getAccounts();
-    std::vector<AccountWithBalance> accsBalances{};
-    for(auto acc : *accs) {
-        if(acc.Deleted()) {
+        if(acc.deleted()) {
             continue;
         }
-        auto bal = ledger->getBalance(acc.Id());
-        AccountWithBalance a(acc, bal);
+        const auto bal = m_ledger->get_balance(acc.id());
+        account_with_balance a(acc, bal);
         accsBalances.push_back(a);
     }
     return accsBalances;
 }
 
-void BankManager::throwIfLedgerInvalid() {
-    if(!ledger->isLedgerValid()) {
+void bank_manager::throw_if_ledger_invalid() const {
+    if(!m_ledger->is_ledger_valid()) {
         throw std::runtime_error("lista transakcji byla niepoprawna podczas sprawdzenia");
     }
 }
 
-std::vector<Transaction> BankManager::getTransactions() {
-    auto transactions = *ledger->getTransactions();
+std::vector<transaction> bank_manager::get_transactions() const {
+    auto transactions = *m_ledger->get_transactions();
     return transactions;
 }
 
-std::string BankManager::getAccountsDbLocation() {
-    return accDalc->getLocation();
+std::string bank_manager::get_accounts_db_location() const {
+    return m_account_dalc->get_location();
 }
 
-std::string BankManager::getLedgerDbLocation() {
-    return ledgDalc->getLocation();
+std::string bank_manager::get_ledger_db_location() const {
+    return m_ledger_dalc->get_location();
 }

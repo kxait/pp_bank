@@ -1,11 +1,11 @@
 #include "account_with_balance.h"
 
-AccountWithBalance::AccountWithBalance(AccountList::Account under, double balance)
-    : AccountList::Account(under.Id(), under.Name(), under.Pesel(), under.Deleted()),
-    balance(balance) {
+account_with_balance::account_with_balance(account under, const double balance)
+    : account(under.id(), under.name(), under.pesel(), under.deleted()),
+      m_balance(balance) {
 
 }
 
-double AccountWithBalance::Balance() const {
-    return balance;
+double account_with_balance::balance() const {
+    return m_balance;
 }

@@ -1,105 +1,105 @@
 #include "bank_manager_logger.h"
 #include <sstream>
 
-BankManagerLogger::BankManagerLogger(LedgerDALC *ledgDalc, AccountDALC *accDalc, UserLogger* logger)
-    : BankManager(ledgDalc, accDalc),
-    logger(logger) {
-    logger->logInfo("stworzono nowy bank manager");
+bank_manager_logger::bank_manager_logger(ledger_dalc *ledg_dalc, account_dalc *acc_dalc, user_logger* logger)
+    : bank_manager(ledg_dalc, acc_dalc),
+    m_logger(logger) {
+    logger->log_info("stworzono nowy bank manager");
 }
 
-AccountList::Account *BankManagerLogger::createAccount(std::string holderName, std::string holderPesel, bool deleted) {
-    auto a = BankManager::createAccount(holderName, holderPesel, deleted);
+account_list::account *bank_manager_logger::create_account(const std::string holder_name, const std::string holder_pesel, const bool deleted) {
+    auto a = bank_manager::create_account(holder_name, holder_pesel, deleted);
     std::stringstream ss{};
-    ss << "stworzono konto id " << a->Id() << " nazwa '" << holderName << "' pesel '" << holderPesel << "' " << " usuniety: " << deleted;
-    logger->logInfo(ss.str());
+    ss << "stworzono konto id " << a->id() << " nazwa '" << holder_name << "' pesel '" << holder_pesel << "' " << " usuniety: " << deleted;
+    m_logger->log_info(ss.str());
     return a;
 }
 
-AccountList::Account *BankManagerLogger::modifyAccount(long id, std::string holderName, std::string holderPesel, bool deleted) {
-    auto a = BankManager::modifyAccount(id, holderName, holderPesel, deleted);
+account_list::account *bank_manager_logger::modify_account(const long id, const std::string holder_name, const std::string holder_pesel, const bool deleted) {
+    auto a = bank_manager::modify_account(id, holder_name, holder_pesel, deleted);
     std::stringstream ss{};
-    ss << "zmodyfikowano konto id " << a->Id() << " nowa nazwa '" << holderName << "' nowy pesel '" << holderPesel << "' " << " usuniety: " << deleted;
-    logger->logInfo(ss.str());
+    ss << "zmodyfikowano konto id " << a->id() << " nowa nazwa '" << holder_name << "' nowy pesel '" << holder_pesel << "' " << " usuniety: " << deleted;
+    m_logger->log_info(ss.str());
     return a;
 }
 
-void BankManagerLogger::deleteAccountWithPayout(long id) {
+void bank_manager_logger::delete_account_with_payout(const long id) {
     std::stringstream ss{};
     try {
-        BankManager::deleteAccountWithPayout(id);
+        bank_manager::delete_account_with_payout(id);
     }catch(const std::exception& e) {
         ss << "nie udalo sie usunac konta id " << id << ": " << e.what();
-        logger->logError(ss.str());
+        m_logger->log_error(ss.str());
         throw e;
     }
     ss << "usunieto konto " << id;
-    logger->logInfo(ss.str());
+    m_logger->log_info(ss.str());
 }
 
-void BankManagerLogger::deleteAccountWithTransfer(long id, long destId) {
+void bank_manager_logger::delete_account_with_transfer(const long id, const long dest_id) {
     std::stringstream ss{};
     try {
-        BankManager::deleteAccountWithTransfer(id, destId);
+        bank_manager::delete_account_with_transfer(id, dest_id);
     }catch(const std::exception& e) {
         ss << "nie udalo sie usunac konta id " << id << ": " << e.what();
-        logger->logError(ss.str());
+        m_logger->log_error(ss.str());
         throw e;
     }
-    ss << "usunieto konto " << id << " z transferem do konta " << destId;
-    logger->logInfo(ss.str());
+    ss << "usunieto konto " << id << " z transferem do konta " << dest_id;
+    m_logger->log_info(ss.str());
 }
 
-Ledger::Transaction BankManagerLogger::createTransaction(long sourceId, long destId, double amount) {
+ledger::transaction bank_manager_logger::create_transaction(const long source_id, const long dest_id, const double amount) {
     std::stringstream ss{};
     try {
-        auto a = BankManager::createTransaction(sourceId, destId, amount);
-        ss << "stworzono transakcje " << a.Id() << " o parametrach id zrodlowe: " << sourceId << " id docelowe: " << destId << " ilosc: " << amount;
-        logger->logInfo(ss.str());
+        const auto a = bank_manager::create_transaction(source_id, dest_id, amount);
+        ss << "stworzono transakcje " << a.id() << " o parametrach id zrodlowe: " << source_id << " id docelowe: " << dest_id << " ilosc: " << amount;
+        m_logger->log_info(ss.str());
         return a;
     }catch(const std::exception& e) {
-        ss << "nie udalo sie stworzyc transakcji o parametrach: id zrodlowe: " << sourceId
-            << " id docelowe: " << destId
+        ss << "nie udalo sie stworzyc transakcji o parametrach: id zrodlowe: " << source_id
+            << " id docelowe: " << dest_id
             << " ilosc: " << amount
             << ": " << e.what();
-        logger->logError(ss.str());
+        m_logger->log_error(ss.str());
         throw e;
     }
 }
 
-void BankManagerLogger::saveData() {
+void bank_manager_logger::save_data() {
     std::stringstream ss{};
     try {
-        BankManager::saveData();
+        bank_manager::save_data();
     }catch(const std::exception& e) {
         ss << "nie udalo sie zapisac danych: " << e.what();
-        logger->logError(ss.str());
+        m_logger->log_error(ss.str());
         throw e;
     }
     ss << "udalo sie zapisac dane";
-    logger->logInfo(ss.str());
+    m_logger->log_info(ss.str());
 }
 
-void BankManagerLogger::readData() {
+void bank_manager_logger::read_data() {
     std::stringstream ss{};
     try {
-        BankManager::readData();
+        bank_manager::read_data();
     }catch(const std::exception& e) {
         ss << "nie udalo sie przeczytac nowych danych: " << e.what();
-        logger->logError(ss.str());
+        m_logger->log_error(ss.str());
         throw e;
     }
     ss << "udalo sie przeczytac nowe dane";
-    logger->logInfo(ss.str());
+    m_logger->log_info(ss.str());
 }
 
-std::vector<AccountWithBalance> BankManagerLogger::getAccountList() {
-    return BankManager::getAccountList();
+std::vector<account_with_balance> bank_manager_logger::get_account_list() {
+    return bank_manager::get_account_list();
 }
 
-double BankManagerLogger::accountBalance(long id) {
-    return BankManager::accountBalance(id);
+double bank_manager_logger::account_balance(const long id) {
+    return bank_manager::account_balance(id);
 }
 
-AccountList::Account *BankManagerLogger::getAccount(long id) {
-    return BankManager::getAccount(id);
+account_list::account *bank_manager_logger::get_account(const long id) {
+    return bank_manager::get_account(id);
 }

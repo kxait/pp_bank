@@ -2,17 +2,17 @@
 #define PP_BANK_BANKCONFIG_H
 
 #include <string>
-#include "DALC\config_dalc.h"
+#include "dalc\config_dalc.h"
 
-class BankConfig {
-    std::string ledgerDbLocation;
-    std::string accountsDbLocation;
-    ConfigDALC* config;
-    void getConfig();
+class bank_config {
+    std::string m_ledger_db_location;
+    std::string m_accounts_db_location;
+    config_dalc* m_config{};
+    void get_config();
 public:
-    BankConfig(ConfigDALC*);
-    std::string LedgerDbLocation();
-    std::string AccountsDbLocation();
+    explicit bank_config(config_dalc*);
+    std::string ledger_db_location();
+    std::string accounts_db_location();
 };
 
 

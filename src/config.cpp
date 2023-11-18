@@ -1,15 +1,15 @@
 #include "config.h"
 
-Config::Config(std::map<std::string, std::string> conf)
-    : config(conf) {
+config::config(std::map<std::string, std::string> conf)
+    : m_config(std::move(conf)) {
 
 }
 
-bool Config::exists(std::string id) {
-    auto v = config[id];
+bool config::exists(const std::string&id) {
+    const auto v = m_config[id];
     return !v.empty();
 }
 
-std::string Config::get(std::string id) {
-    return config[id];
+std::string config::get(const std::string&id) {
+    return m_config[id];
 }

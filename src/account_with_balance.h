@@ -3,11 +3,11 @@
 
 #include "account_list.h"
 
-class AccountWithBalance : public AccountList::Account {
-    double balance{};
+class account_with_balance : public account_list::account {
+    double m_balance{};
 public:
-    AccountWithBalance(AccountList::Account under, double balance);
-    double Balance() const;
+    account_with_balance(account under, double balance);
+    double balance() const;
 };
 
 
