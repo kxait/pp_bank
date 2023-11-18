@@ -2,9 +2,9 @@
 
 #include "new_transaction_dialog.h"
 #include "input_field.h"
-#include "..\lib"
+#include "../lib/screen_props.h"
 #include "menu_horizontal.h"
-#include "..\..\log\user_logger.h"
+#include "../../log/user_logger.h"
 
 void edit_account_dialog::rotate_focused_field(const bool down) {
     m_fields[m_focused_field]->remove_focus();

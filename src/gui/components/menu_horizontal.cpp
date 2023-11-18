@@ -1,6 +1,6 @@
 #include "menu_horizontal.h"
 
-#include "..\..\log\user_logger.h"
+#include "../../log/user_logger.h"
 
 menu_horizontal::menu_horizontal(int y, int x, int h, int w, std::vector<std::string> opts, component* parent, const int start_idx)
     : component(y,x,h,w,parent),

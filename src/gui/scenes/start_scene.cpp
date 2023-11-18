@@ -1,7 +1,6 @@
 #include "start_scene.h"
-#include "..\lib"
 #include "../components/popup.h"
-#include "..\..\log\user_logger.h"
+#include "../../log/user_logger.h"
 
 start_scene::start_scene(bank_manager * mgr, scene_composer * par)
     : scene(par),

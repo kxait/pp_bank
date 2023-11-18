@@ -2,9 +2,9 @@
 #define PP_BANK_TRANSACTIONLISTSCENE_H
 
 
-#include "..\lib"
-#include "..\lib"
-#include "..\..\bank_manager.h"
+#include "../lib/scene.h"
+#include "../lib/component.h"
+#include "../../bank_manager.h"
 
 class transaction_list_scene : public scene {
     bank_manager* m_manager;

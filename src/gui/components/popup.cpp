@@ -1,6 +1,6 @@
 #include "popup.h"
-#include "..\lib"
-#include "..\..\log\user_logger.h"
+#include "../lib/screen_props.h"
+#include "../../log/user_logger.h"
 
 #include<sstream>
 #include<map>

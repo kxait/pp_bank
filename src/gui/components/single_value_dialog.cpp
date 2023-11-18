@@ -2,7 +2,7 @@
 
 #include "input_field.h"
 #include "menu_horizontal.h"
-#include "..\lib"
+#include "../lib/screen_props.h"
 
 void single_value_dialog::rotate_focused_field(const bool down) {
     m_fields[m_focused_field]->remove_focus();

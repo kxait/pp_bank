@@ -1,5 +1,5 @@
 #include "popup_vertical.h"
-#include "..\lib"
+#include "../lib/screen_props.h"
 
 popup_vertical::popup_vertical(const int y, const int x, const int h, const int w, const std::vector<std::string>&opts, component * par)
     : paged_list(y, x, h, w, opts, par) {

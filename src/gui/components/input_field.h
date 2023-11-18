@@ -2,7 +2,9 @@
 #define PP_BANK_INPUTFIELD_H
 
 
-#include "..\lib"
+#include <string>
+
+#include "../lib/component.h"
 
 class input_field : public component {
     std::string m_value{};

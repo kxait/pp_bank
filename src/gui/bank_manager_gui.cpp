@@ -1,9 +1,9 @@
 #include "bank_manager_gui.h"
-#include "scenes\account_display_scene.h"
-#include "scenes\transaction_list_scene.h"
-#include "scenes\scene_menu_scene.h"
-#include "lib\scene_composer.h"
-#include "scenes\start_scene.h"
+#include "scenes/account_display_scene.h"
+#include "scenes/transaction_list_scene.h"
+#include "scenes/scene_menu_scene.h"
+#include "lib/scene_composer.h"
+#include "scenes/start_scene.h"
 #include<ncurses.h>
 #include<sstream>
 

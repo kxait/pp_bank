@@ -1,10 +1,11 @@
 #include "transaction_list_scene.h"
-#include "..\components\paged_list.h"
-#include "..\components\menu_horizontal.h"
-#include "..\components\new_transaction_dialog.h"
+#include "../components/paged_list.h"
+#include "../components/menu_horizontal.h"
+#include "../components/new_transaction_dialog.h"
 #include "../components/popup.h"
-#include "..\lib"
-#include "..\..\log\user_logger.h"
+#include "../lib/scene_composer.h"
+#include "../lib/screen_props.h"
+#include "../../log/user_logger.h"
 
 #include<cstring>
 
@@ -36,7 +37,7 @@ void transaction_list_scene::create_components() {
     m_accounts = m_manager->get_account_list();
     m_transactions = m_manager->get_transactions();
 
-    // id \t sourceName \t destName \t amount
+    // id /t sourceName /t destName /t amount
     const auto props = screen_props::get();
     int max_width = props.width()-2;
     std::vector<std::string> names;

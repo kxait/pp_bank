@@ -4,10 +4,10 @@
 #include "bank_manager.h"
 #include "account_list.h"
 #include "ledger.h"
-#include "dalc\account_dalc.h"
-#include "dalc\ledger_dalc.h"
+#include "dalc/account_dalc.h"
+#include "dalc/ledger_dalc.h"
 #include "account_with_balance.h"
-#include "log\user_logger.h"
+#include "log/user_logger.h"
 
 // also catches exceptions
 class bank_manager_logger : public bank_manager {

@@ -1,7 +1,7 @@
 #ifndef PP_BANK_CONFIGCSV_H
 #define PP_BANK_CONFIGCSV_H
 
-#include "..\dalc\config_dalc.h"
+#include "../dalc/config_dalc.h"
 
 class config_csv : public config_dalc {
     std::string m_filename;

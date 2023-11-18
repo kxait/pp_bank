@@ -1,8 +1,8 @@
 #include "new_transaction_dialog.h"
 #include "input_field.h"
-#include "..\lib"
+#include "../lib/screen_props.h"
 #include "menu_horizontal.h"
-#include "..\..\log\user_logger.h"
+#include "../../log/user_logger.h"
 
 new_transaction_dialog::new_transaction_dialog(
     const int y,

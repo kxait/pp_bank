@@ -2,7 +2,7 @@
 #define PP_BANK_ACCOUNTMOCK_H
 
 #include<vector>
-#include "..\dalc\account_dalc.h"
+#include "../dalc/account_dalc.h"
 
 class account_mock : public account_dalc {
     static std::vector<account> m_data;

@@ -12,8 +12,8 @@ class scene_composer : public event_observer {
     bool m_running = false;
 public:
     scene_composer();
-    void register_scene(std::string, scene*);
-    void switch_scene(std::string);
+    void register_scene(const std::string&, scene*);
+    void switch_scene(const std::string&);
     void exit(int);
     void run();
 

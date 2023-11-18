@@ -1,7 +1,7 @@
 #ifndef PP_BANK_CONFIGMOCK_H
 #define PP_BANK_CONFIGMOCK_H
 
-#include "..\dalc\config_dalc.h"
+#include "../dalc/config_dalc.h"
 
 class config_mock : public config_dalc {
     static std::map<std::string, std::string> m_data;

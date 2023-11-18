@@ -1,8 +1,9 @@
 #include "scene_menu_scene.h"
-#include "..\components\paged_list.h"
-#include "..\lib"
+#include "../components/paged_list.h"
+#include "../lib/scene_composer.h"
+#include "../lib/screen_props.h"
 #include "../components/popup.h"
-#include "..\..\log\user_logger.h"
+#include "../../log/user_logger.h"
 
 void scene_menu_scene::render() const {
     mvprintw(0, 0, "--- BANK ---");

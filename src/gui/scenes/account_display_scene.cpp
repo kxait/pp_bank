@@ -1,13 +1,14 @@
 #include "account_display_scene.h"
-#include "..\components\paged_list.h"
-#include "..\components\bank_account_display.h"
-#include "..\..\log\user_logger.h"
+#include "../components/paged_list.h"
+#include "../components/bank_account_display.h"
+#include "../../log/user_logger.h"
 #include"../components/popup.h"
-#include "..\components\popup_vertical.h"
-#include "..\lib"
-#include "..\components\new_transaction_dialog.h"
-#include "..\components\single_value_dialog.h"
-#include "..\components\edit_account_dialog.h"
+#include "../lib/scene_composer.h"
+#include "../lib/screen_props.h"
+#include "../components/popup_vertical.h"
+#include "../components/new_transaction_dialog.h"
+#include "../components/single_value_dialog.h"
+#include "../components/edit_account_dialog.h"
 
 #include<cstring>
 

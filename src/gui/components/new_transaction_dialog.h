@@ -2,7 +2,7 @@
 #define PP_BANK_NEWTRANSACTIONDIALOG_H
 
 
-#include "..\lib"
+#include "../lib/component.h"
 #include "../../ledger.h"
 #include<vector>
 

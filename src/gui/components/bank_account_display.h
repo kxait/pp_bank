@@ -2,8 +2,8 @@
 #define PP_BANK_BANKACCOUNTDISPLAY_H
 
 
-#include "..\lib"
-#include "..\..\account_with_balance.h"
+#include "../lib/component.h"
+#include "../../account_with_balance.h"
 
 class bank_account_display : public component {
     std::vector<account_with_balance> m_accounts{};

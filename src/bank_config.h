@@ -2,7 +2,7 @@
 #define PP_BANK_BANKCONFIG_H
 
 #include <string>
-#include "dalc\config_dalc.h"
+#include "dalc/config_dalc.h"
 
 class bank_config {
     std::string m_ledger_db_location;

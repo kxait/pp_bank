@@ -1,7 +1,6 @@
 #include "event_observer.h"
 
-#include <utility>
-#include "..\..\log\user_logger.h"
+#include "../../log/user_logger.h"
 
 user_logger* logger;
 

@@ -1,8 +1,8 @@
 #ifndef PP_BANK_EDITACCOUNTDIALOG_H
 #define PP_BANK_EDITACCOUNTDIALOG_H
 
-#include "..\lib"
-#include "..\..\account_list.h"
+#include "../lib/component.h"
+#include "../../account_list.h"
 #include<vector>
 
 class edit_account_dialog : public component {

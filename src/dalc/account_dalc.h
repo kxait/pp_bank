@@ -3,7 +3,7 @@
 
 
 #include <vector>
-#include "..\account_list.h"
+#include "../account_list.h"
 
 class account_dalc {
 public:

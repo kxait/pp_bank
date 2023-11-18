@@ -1,5 +1,5 @@
 #include "bank_account_display.h"
-#include "..\..\log\user_logger.h"
+#include "../../log/user_logger.h"
 
 bank_account_display::bank_account_display(const int y, const int x, const int height, const int width, const std::vector<account_with_balance>&list, event_observer* parent)
     : component(y, x, height, width, parent),

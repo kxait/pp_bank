@@ -1,7 +1,7 @@
 #include "bank_manager.h"
 
-#include "dalc\ledger_dalc.h"
-#include "dalc\account_dalc.h"
+#include "dalc/ledger_dalc.h"
+#include "dalc/account_dalc.h"
 
 bank_manager::bank_manager(ledger_dalc* ledg_dalc, account_dalc* acc_dalc)
     : m_transaction_factory(nullptr),

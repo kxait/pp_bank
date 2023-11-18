@@ -1,6 +1,6 @@
 #include "paged_list.h"
 
-#include "..\..\log\user_logger.h"
+#include "../../log/user_logger.h"
 
 paged_list::paged_list(const int y, const int x, const int height, const int width, std::vector<std::string> data, event_observer* parent)
     : component( y, x, height, width, parent),

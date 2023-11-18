@@ -2,7 +2,7 @@
 #define PP_BANK_BANKMANAGERGUI_H
 
 
-#include "..\bank_manager.h"
+#include "../bank_manager.h"
 
 class bank_manager_gui {
     bank_manager* m_manager;

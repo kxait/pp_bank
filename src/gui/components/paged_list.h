@@ -3,7 +3,7 @@
 
 #include<iostream>
 #include<vector>
-#include "..\lib"
+#include "../lib/component.h"
 
 class paged_list : public component {
     std::vector<std::string> m_data;

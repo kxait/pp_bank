@@ -2,7 +2,6 @@
 #define PP_BANK_POPUPVERTICAL_H
 
 
-#include "..\lib"
 #include "paged_list.h"
 
 class popup_vertical : public paged_list {

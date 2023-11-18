@@ -1,7 +1,7 @@
 #ifndef PP_BANK_SINGLEVALUEDIALOG_H
 #define PP_BANK_SINGLEVALUEDIALOG_H
 
-#include "..\lib"
+#include "../lib/component.h"
 #include <vector>
 #include<string>
 

@@ -3,7 +3,7 @@
 
 #include <string>
 #include <vector>
-#include "..\dalc\ledger_dalc.h"
+#include "../dalc/ledger_dalc.h"
 
 class ledger_csv : public ledger_dalc {
     std::string m_filename;

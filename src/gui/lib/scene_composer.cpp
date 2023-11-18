@@ -1,17 +1,17 @@
 #include "scene_composer.h"
 
-#include "..\..\log\user_logger.h"
+#include "../../log/user_logger.h"
 #include "scene.h"
 
 scene_composer::scene_composer()
 {
 }
 
-void scene_composer::register_scene(std::string a, scene * b) {
+void scene_composer::register_scene(const std::string&a, scene * b) {
     m_scenes[a] = b;
 }
 
-void scene_composer::switch_scene(std::string a) {
+void scene_composer::switch_scene(const std::string&a) {
     if(m_scenes[a] == nullptr) {
         return;
     }
@@ -28,7 +28,7 @@ void scene_composer::run() {
     }
 }
 
-void scene_composer::exit(int a) {
+void scene_composer::exit(const int a) {
     const auto logger = user_logger::get_logger();
     logger->log_info(user_logger::get_string({
         "aplikacja jest zakonczona z kodem ",

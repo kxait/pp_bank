@@ -2,9 +2,8 @@
 #define PP_BANK_SCENEMENUSCENE_H
 
 
-#include "..\lib"
-#include "..\lib"
-#include "..\..\bank_manager.h"
+#include "../lib/scene.h"
+#include "../../bank_manager.h"
 
 class scene_menu_scene : public scene  {
     bank_manager* m_manager;

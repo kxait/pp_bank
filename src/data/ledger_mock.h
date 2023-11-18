@@ -2,7 +2,7 @@
 #define PP_BANK_LEDGERMOCK_H
 
 #include <vector>
-#include "..\dalc\ledger_dalc.h"
+#include "../dalc/ledger_dalc.h"
 
 class ledger_mock : public ledger_dalc {
     static std::vector<ledger::transaction> m_data;

@@ -1,7 +1,7 @@
 #ifndef PP_BANK_POPUP_H
 #define PP_BANK_POPUP_H
 
-#include "..\lib"
+#include "../lib/component.h"
 #include "menu_horizontal.h"
 
 enum popup_type_t {

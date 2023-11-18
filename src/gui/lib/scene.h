@@ -1,7 +1,6 @@
 #ifndef PP_BANK_SCENE_H
 #define PP_BANK_SCENE_H
 
-#include<vector>
 #include"component.h"
 
 class scene_composer;
